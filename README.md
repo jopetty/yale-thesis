@@ -1,6 +1,17 @@
 # yale-thesis
 A LaTeX Class for typesetting a doctoral dissertation for the Yale University Graduate School of Arts and Sciences
 
+## Goals
+This class was made to be:
+* Conformant to the Yale GSAS formatting guidelines.
+* A `LaTeX3` programming exercise. This class is programmed using `expl`.
+
+## Usage
+Compile with `pdflatex`.
+```
+$ pdflatex main.tex
+```
+
 ## Specifications
 A summary of the [Guide to Formatting the Doctoral Dissertation](http://gsas.yale.edu/sites/default/files/formatdissertation.pdf) by the Yale University GSAS.
 
