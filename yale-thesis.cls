@@ -5,35 +5,33 @@
 \ExplSyntaxOn
 
 %% Define Class Metadata
-\tl_const:Nn \c__yale_class_name_tl			{yale-thesis}
+\tl_const:Nn \c__yale_class_name_tl		{yale-thesis}
 \tl_const:Nn \c__yale_class_version_tl		{0.0.1}
-\tl_const:Nn \c__yale_class_date_tl			{2017/08/03}
-\tl_const:Nn \c__yale_class_description_tl	{
-A~LaTeX3~class~for~typesetting~doctoral~dissertations~for~Yale~University
-}
+\tl_const:Nn \c__yale_class_date_tl		{2017/08/03}
+\tl_const:Nn \c__yale_class_description_tl	{A~LaTeX3~class~for~typesetting~doctoral~dissertations~for~Yale~University}
 \tl_const:Nn \c__yale_university_name_tl	{Yale~University}
+\tl_const:Nn \c__yale_parent_class_tl		{report}
 
-\ProvidesExplClass{\c__yale_class_name_tl} 			% class name
-				  {\c__yale_class_date_tl}			% date
-				  {\c__yale_class_version_tl}		% verison
-				  {\c__yale_class_description_tl}	% description
-
-\tl_new:N   \g_yale_parent_class_tl
-\tl_gset:Nn \g_yale_parent_class_tl {report}
+\ProvidesExplClass{\c__yale_class_name_tl} 		% class name
+		  {\c__yale_class_date_tl}		% date
+		  {\c__yale_class_version_tl}		% verison
+		  {\c__yale_class_description_tl}	% description
 
 %% Option Parsing
 % \DeclareOption*{
 % 	\PassOptionsToClass{\CurrentOption}
-% 					   {\g_yale_parent_class_tl}
+% 					   {\c__yale_parent_class_tl}
 % }
 
 %% Define Class Commands
+% Redefine \author, \title, and \date for consistency and to be able to
+% re-use their values
 \RenewDocumentCommand\author{ m }	{\tl_const:Nn \g_author_tl {#1}}
 \RenewDocumentCommand\title{ m }	{\tl_const:Nn \g_title_tl {#1}}
 \RenewDocumentCommand\date{ m }		{\tl_const:Nn \g_date_tl {#1}}
 \NewDocumentCommand\advisor{ m }	{\tl_const:Nn \g_advisor_tl {#1}}
 
-\LoadClass[letterpaper,12pt]{\g_yale_parent_class_tl}
+\LoadClass[letterpaper,12pt]{\c__yale_parent_class_tl}
 
 %% Margins
 \RequirePackage{geometry}
