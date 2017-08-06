@@ -44,7 +44,6 @@
 
 %% Margins
 \RequirePackage{geometry}
-%\geometry{showframe} % Use while developing to check placement/margins
 \geometry{top=1in, bottom=1in, left=1.5in, right=1in, headheight=15pt}
 
 %% Title Page & Abstract
@@ -69,8 +68,8 @@
 \RenewDocumentCommand\maketitle{ } {
 	\begin{titlepage}
 		\begin{singlespace}
-		\begin{center}
-			\g_title_tl
+			\begin{center}
+				\g_title_tl
 				\par\vfill
 				A~Dissertation\\
 				Presented~to~the~Faculty~of~the~Graduate~School\\
@@ -85,7 +84,7 @@
 				Dissertation~Director:~\g_advisor_tl
 				\par\vspace{1.5em}
 				\g_date_tl
-		\end{center}
+			\end{center}
 		\end{singlespace}
 	\end{titlepage}
 }
@@ -97,10 +96,24 @@
 
 %% Draft
 \bool_if:NT \g_isdraft_bool {
-\RequirePackage{fancyhdr}
-\pagestyle{fancy}
-\renewcommand{\headrulewidth}{0pt}
-\fancyhf{}
-\fancyhead[R]{\texttt{DRAFT~of~\today}}
-\fancyfoot[C]{\thepage}
+	\RequirePackage{fancyhdr}
+	
+	% Add draft header to titlepage(s)
+	\fancypagestyle{empty}{
+		\fancyhf{}
+		\fancyhead[R]{\texttt{DRAFT~of~\today}}
+	}
+	
+	% Add draft header to pages @ the start of chapters
+	\fancypagestyle{plain}{
+		\fancyhf{}
+		\fancyhead[R]{\texttt{DRAFT~of~\today}}
+		\fancyfoot[C]{\thepage}
+	}
+	
+	\pagestyle{fancy}
+	\renewcommand{\headrulewidth}{0pt}
+	\fancyhf{}
+	\fancyhead[R]{\texttt{DRAFT~of~\today}}
+	\fancyfoot[C]{\thepage}
 }
