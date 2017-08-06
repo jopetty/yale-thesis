@@ -25,7 +25,16 @@
 \RenewDocumentCommand\date{ m }		{\tl_const:Nn \g_date_tl {#1}}
 \NewDocumentCommand\advisor{ m }	{\tl_const:Nn \g_advisor_tl {#1}}
 
+\bool_new:N		\g_isdraft_bool
+\bool_gset_false:N	\g_isdraft_bool
+
+
 %% Option Parsing
+\DeclareOption{draft}{
+\bool_gset_true:N \g_isdraft_bool
+\PassOptionsToClass{draft}{\c__yale_parent_class_tl}
+}
+
 \DeclareOption*{
 	\PassOptionsToClass{\CurrentOption}{\c__yale_parent_class_tl}
 }
@@ -35,7 +44,8 @@
 
 %% Margins
 \RequirePackage{geometry}
-\geometry{top=1in, bottom=1in, left=1.5in, right=1in}
+\geometry{showframe} % Use while developing to check placement/margins
+\geometry{top=1in, bottom=1in, left=1.5in, right=1in, headheight=15pt}
 
 %% Title Page & Abstract
 \RenewDocumentEnvironment{abstract} {} {
@@ -77,4 +87,16 @@
 	\end{titlepage}
 }
 
+%% Remaining Packages
 \RequirePackage{kantlipsum}	% Filler Text
+\RequirePackage{microtype}	% Typography refinement
+
+%% Draft
+\bool_if:NT \g_isdraft_bool {
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhf{}
+\fancyhead[R]{\texttt{DRAFT~of~\today}}
+\fancyfoot[C]{\thepage}
+}
