@@ -66,7 +66,6 @@
 
 \RenewDocumentCommand\maketitle{ } {
 	\begin{titlepage}
-		\null
 		\begin{center}
 			\g_title_tl
 				\par\vfill
