@@ -17,12 +17,6 @@
 		  {\c__yale_class_version_tl}		% verison
 		  {\c__yale_class_description_tl}	% description
 
-%% Option Parsing
-% \DeclareOption*{
-% 	\PassOptionsToClass{\CurrentOption}
-% 					   {\c__yale_parent_class_tl}
-% }
-
 %% Define Class Commands
 % Redefine \author, \title, and \date for consistency and to be able to
 % re-use their values
@@ -31,7 +25,13 @@
 \RenewDocumentCommand\date{ m }		{\tl_const:Nn \g_date_tl {#1}}
 \NewDocumentCommand\advisor{ m }	{\tl_const:Nn \g_advisor_tl {#1}}
 
-\LoadClass[letterpaper,12pt]{\c__yale_parent_class_tl}
+%% Option Parsing
+\DeclareOption*{
+	\PassOptionsToClass{\CurrentOption}{\c__yale_parent_class_tl}
+}
+\ProcessOptions\relax
+
+\LoadClass[letterpaper]{\c__yale_parent_class_tl}
 
 %% Margins
 \RequirePackage{geometry}
@@ -49,8 +49,8 @@
 		\par\vspace{1em}
 		\g_date_tl
 		\par\vspace{1em}
-} {
 	\end{center}
+} {
 	\end{titlepage}
 }
 
