@@ -44,12 +44,13 @@
 
 %% Margins
 \RequirePackage{geometry}
-\geometry{showframe} % Use while developing to check placement/margins
+%\geometry{showframe} % Use while developing to check placement/margins
 \geometry{top=1in, bottom=1in, left=1.5in, right=1in, headheight=15pt}
 
 %% Title Page & Abstract
 \RenewDocumentEnvironment{abstract} {} {
 	\begin{titlepage}
+	\begin{singlespace}
 	\begin{center}
 		Abstract
 		\par\vspace{1em}
@@ -60,12 +61,14 @@
 		\g_date_tl
 		\par\vspace{1em}
 	\end{center}
+	\end{singlespace}
 } {
 	\end{titlepage}
 }
 
 \RenewDocumentCommand\maketitle{ } {
 	\begin{titlepage}
+		\begin{singlespace}
 		\begin{center}
 			\g_title_tl
 				\par\vfill
@@ -83,12 +86,14 @@
 				\par\vspace{1.5em}
 				\g_date_tl
 		\end{center}
+		\end{singlespace}
 	\end{titlepage}
 }
 
 %% Remaining Packages
 \RequirePackage{kantlipsum}	% Filler Text
 \RequirePackage{microtype}	% Typography refinement
+\RequirePackage{setspace} 	\doublespacing
 
 %% Draft
 \bool_if:NT \g_isdraft_bool {
