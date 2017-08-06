@@ -18,11 +18,13 @@
 		  {\c__yale_class_description_tl}	% description
 
 %% Define Class Commands
+\seq_new:N	\g_date_year_seq % sequence to hold regex-extracted year from date
+
 % Redefine \author, \title, and \date for consistency and to be able to
-% re-use their values
+% re-use their values 
 \RenewDocumentCommand\author{ m }	{\tl_const:Nn \g_author_tl {#1}}
 \RenewDocumentCommand\title{ m }	{\tl_const:Nn \g_title_tl {#1}}
-\RenewDocumentCommand\date{ m }		{\tl_const:Nn \g_date_tl {#1}}
+\RenewDocumentCommand\date{ m }		{\tl_const:Nn \g_date_tl {#1} \regex_extract_all:nnN {(\d{4})} {#1} \g_date_year_seq}
 \NewDocumentCommand\advisor{ m }	{\tl_const:Nn \g_advisor_tl {#1}}
 
 \bool_new:N		\g_isdraft_bool
@@ -84,6 +86,17 @@
 				Dissertation~Director:~\g_advisor_tl
 				\par\vspace{1.5em}
 				\g_date_tl
+			\end{center}
+		\end{singlespace}
+	\end{titlepage}
+
+	%% Copyright page
+	\begin{titlepage}
+		\vspace*{1.3in}
+		\begin{singlespace}
+			\begin{center}
+				Copyright~\textcopyright{}~{\seq_item:Nn \g_date_year_seq {1}}~by~\g_author_tl\\
+				All~rights~reserved.
 			\end{center}
 		\end{singlespace}
 	\end{titlepage}
