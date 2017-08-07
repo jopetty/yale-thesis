@@ -1,60 +1,63 @@
 %% yale-thesis.cls
 
 \RequirePackage{expl3, xparse}
-\RequirePackage{datetime}
 
 \ExplSyntaxOn
 
 %% Define Class Metadata
-\tl_const:Nn \c__yale_class_name_tl		{yale-thesis}
-\tl_const:Nn \c__yale_class_version_tl		{0.0.1}
-\tl_const:Nn \c__yale_class_date_tl		{2017/08/03}
-\tl_const:Nn \c__yale_class_description_tl	{A~LaTeX3~class~for~typesetting~doctoral~dissertations~for~Yale~University}
-\tl_const:Nn \c__yale_university_name_tl	{Yale~University}
-\tl_const:Nn \c__yale_parent_class_tl		{report}
+\tl_const:Nn \c__ythesis_class_name_tl		{yale-thesis}
+\tl_const:Nn \c__ythesis_class_version_tl	{0.0.1}
+\tl_const:Nn \c__ythesis_class_date_tl		{2017/08/03}
+\tl_const:Nn \c__ythesis_class_description_tl	{A~LaTeX3~class~for~typesetting~doctoral~dissertations~for~Yale~University}
+\tl_const:Nn \c__ythesis_university_name_tl	{Yale~University}
+\tl_const:Nn \c__ythesis_parent_class_tl	{report}
 
-\ProvidesExplClass{\c__yale_class_name_tl} 		% class name
-		  {\c__yale_class_date_tl}		% date
-		  {\c__yale_class_version_tl}		% verison
-		  {\c__yale_class_description_tl}	% description
+\ProvidesExplClass{\c__ythesis_class_name_tl} 		% class name
+		  {\c__ythesis_class_date_tl}		% date
+		  {\c__ythesis_class_version_tl}	% verison
+		  {\c__ythesis_class_description_tl}	% description
 
 %% Define Class Commands
-\seq_new:N  \g_year_seq % Sequence to store the match from regex
-\tl_new:N   \g_year_tl  % Token list to store the year
-\tl_new:N   \g_date_tl  % Token list to store the full date
+\seq_new:N  \g_ythesis_yearseq % Sequence to store the match from regex
+\tl_new:N   \g_ythesis_yeartl  % Token list to store the year
+\tl_new:N   \g_ythesis_datetl  % Token list to store the full date
 
 % Expand commands passed to \date{}, like \today
 \cs_generate_variant:Nn \regex_extract_all:nnN { nx }
 
 % Redefine \author, \title, and \date for consistency and to be able to
 % re-use their values 
-\RenewDocumentCommand\author{ m }	{\tl_const:Nn \g_author_tl {#1}}
-\RenewDocumentCommand\title{ m }	{\tl_const:Nn \g_title_tl {#1}}
+\RenewDocumentCommand\author{ m }	{\tl_const:Nn \g_ythesis_author_tl {#1}}
+\RenewDocumentCommand\title{ m }	{\tl_const:Nn \g_ythesis_title_tl {#1}}
+\NewDocumentCommand\advisor{ m }	{\tl_const:Nn \g_ythesis_advisor_tl {#1}}
 \RenewDocumentCommand\date{ m }     
 {
-    \tl_gset:Nx \g_date_tl {#1}
-    \regex_extract_all:nxN {(\d{4})} {\g_date_tl} \g_year_seq
-    \tl_gset:Nn \g_year_tl {\seq_item:Nn \g_year_seq {1}}
+    \tl_gset:Nx \g_ythesis_datetl {#1}
+    \regex_extract_all:nxN {(\d{4})} {\g_ythesis_datetl} \g_ythesis_yearseq
+    \tl_gset:Nn \g_ythesis_yeartl {\seq_item:Nn \g_ythesis_yearseq {1}}
 }
-\NewDocumentCommand\advisor{ m }	{\tl_const:Nn \g_advisor_tl {#1}}
 
 % Draft option switch
-\bool_new:N		\g_isdraft_bool
-\bool_gset_false:N	\g_isdraft_bool
+\bool_new:N		\g_ythesis_isdraft_bool
+\bool_gset_false:N	\g_ythesis_isdraft_bool
+
+% Page numbering
+\tl_new:N	\g_page_numbering_tl
 
 
 %% Option Parsing
-\DeclareOption{draft}{
-\bool_gset_true:N \g_isdraft_bool
-\PassOptionsToClass{draft}{\c__yale_parent_class_tl}
+
+\DeclareOption{draft}{ % Set the draft option switch
+\bool_gset_true:N \g_ythesis_isdraft_bool
+\PassOptionsToClass{draft}{\c__ythesis_parent_class_tl}
 }
 
-\DeclareOption*{
-	\PassOptionsToClass{\CurrentOption}{\c__yale_parent_class_tl}
+\DeclareOption*{ % Pass all remaining options to base class
+	\PassOptionsToClass{\CurrentOption}{\c__ythesis_parent_class_tl}
 }
 \ProcessOptions\relax
 
-\LoadClass[letterpaper]{\c__yale_parent_class_tl}
+\LoadClass[letterpaper]{\c__ythesis_parent_class_tl}
 
 %% Margins
 \RequirePackage{geometry}
@@ -67,11 +70,11 @@
 	\begin{center}
 		Abstract
 		\par\vspace{1em}
-		\g_title_tl
+		\g_ythesis_title_tl
 		\par\vspace{1em}
-		\g_author_tl
+		\g_ythesis_author_tl
 		\par\vspace{1em}
-		\g_date_tl
+		\g_ythesis_datetl
 		\par\vspace{1em}
 	\end{center}
 	\end{singlespace}
@@ -83,7 +86,7 @@
 	\begin{titlepage}
 		\begin{singlespace}
 			\begin{center}
-				\g_title_tl
+				\g_ythesis_title_tl
 				\par\vfill
 				A~Dissertation\\
 				Presented~to~the~Faculty~of~the~Graduate~School\\
@@ -93,11 +96,11 @@
 				Doctor~of~Philosophy
 				\par\vfill
 				by\\
-				\g_author_tl
+				\g_ythesis_author_tl
 				\par\vspace{1.5em}
-				Dissertation~Director:~\g_advisor_tl
+				Dissertation~Director:~\g_ythesis_advisor_tl
 				\par\vspace{1.5em}
-				\g_date_tl
+				\g_ythesis_datetl
 			\end{center}
 		\end{singlespace}
 	\end{titlepage}
@@ -107,8 +110,8 @@
 		\vspace*{1.3in}
 		\begin{singlespace}
 			\begin{center}
-				% \g_date_year_tl \\
-				Copyright~\textcopyright{}~\g_year_tl{}~by~\g_author_tl\\
+				% \g_ythesis__dateyear_tl \\
+				Copyright~\textcopyright{}~\g_ythesis_yeartl{}~by~\g_ythesis_author_tl\\
 				All~rights~reserved.
 			\end{center}
 		\end{singlespace}
@@ -121,7 +124,7 @@
 \RequirePackage{setspace} 	\doublespacing
 
 %% Draft
-\bool_if:NT \g_isdraft_bool {
+\bool_if:NT \g_ythesis_isdraft_bool {
 	\RequirePackage{fancyhdr}
 	
 	% Add draft header to titlepage(s)
@@ -143,3 +146,5 @@
 	\fancyhead[R]{\texttt{DRAFT~of~\today}}
 	\fancyfoot[C]{\thepage}
 }
+
+\ExplSyntaxOff
