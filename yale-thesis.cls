@@ -1,6 +1,7 @@
 %% yale-thesis.cls
 
 \RequirePackage{expl3, xparse}
+\RequirePackage{datetime}
 
 \ExplSyntaxOn
 
@@ -18,15 +19,26 @@
 		  {\c__yale_class_description_tl}	% description
 
 %% Define Class Commands
-\seq_new:N	\g_date_year_seq % sequence to hold regex-extracted year from date
+\seq_new:N  \g_year_seq % Sequence to store the match from regex
+\tl_new:N   \g_year_tl  % Token list to store the year
+\tl_new:N   \g_date_tl  % Token list to store the full date
+
+% Expand commands passed to \date{}, like \today
+\cs_generate_variant:Nn \regex_extract_all:nnN { nx }
 
 % Redefine \author, \title, and \date for consistency and to be able to
 % re-use their values 
 \RenewDocumentCommand\author{ m }	{\tl_const:Nn \g_author_tl {#1}}
 \RenewDocumentCommand\title{ m }	{\tl_const:Nn \g_title_tl {#1}}
-\RenewDocumentCommand\date{ m }		{\tl_const:Nn \g_date_tl {#1} \regex_extract_all:nnN {(\d{4})} {#1} \g_date_year_seq}
+\RenewDocumentCommand\date{ m }     
+{
+    \tl_gset:Nx \g_date_tl {#1}
+    \regex_extract_all:nxN {(\d{4})} {\g_date_tl} \g_year_seq
+    \tl_gset:Nn \g_year_tl {\seq_item:Nn \g_year_seq {1}}
+}
 \NewDocumentCommand\advisor{ m }	{\tl_const:Nn \g_advisor_tl {#1}}
 
+% Draft option switch
 \bool_new:N		\g_isdraft_bool
 \bool_gset_false:N	\g_isdraft_bool
 
@@ -95,7 +107,8 @@
 		\vspace*{1.3in}
 		\begin{singlespace}
 			\begin{center}
-				Copyright~\textcopyright{}~{\seq_item:Nn \g_date_year_seq {1}}~by~\g_author_tl\\
+				% \g_date_year_tl \\
+				Copyright~\textcopyright{}~\g_year_tl{}~by~\g_author_tl\\
 				All~rights~reserved.
 			\end{center}
 		\end{singlespace}
