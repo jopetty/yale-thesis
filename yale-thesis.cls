@@ -157,4 +157,14 @@
 	\fancyfoot[C]{\thepage}
 }
 
+\AtBeginDocument{
+	\begin{abstract}
+		\input{content/0-abstract.tex}
+	\end{abstract}
+
+	\maketitle
+
+	\tableofcontents
+}
+
 \ExplSyntaxOff
