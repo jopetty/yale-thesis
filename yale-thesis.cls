@@ -18,9 +18,9 @@
 		  {\c__ythesis_class_description_tl}	% description
 
 %% Define Class Commands
-\seq_new:N  \g_ythesis_yearseq % Sequence to store the match from regex
-\tl_new:N   \g_ythesis_yeartl  % Token list to store the year
-\tl_new:N   \g_ythesis_datetl  % Token list to store the full date
+\seq_new:N  \g_ythesis_year_seq % Sequence to store the match from regex
+\tl_new:N   \g_ythesis_year_tl  % Token list to store the year
+\tl_new:N   \g_ythesis_date_tl  % Token list to store the full date
 
 % Expand commands passed to \date{}, like \today
 \cs_generate_variant:Nn \regex_extract_all:nnN { nx }
@@ -32,9 +32,9 @@
 \NewDocumentCommand\advisor{ m }	{\tl_const:Nn \g_ythesis_advisor_tl {#1}}
 \RenewDocumentCommand\date{ m }     
 {
-    \tl_gset:Nx \g_ythesis_datetl {#1}
-    \regex_extract_all:nxN {(\d{4})} {\g_ythesis_datetl} \g_ythesis_yearseq
-    \tl_gset:Nn \g_ythesis_yeartl {\seq_item:Nn \g_ythesis_yearseq {1}}
+    \tl_gset:Nx \g_ythesis_date_tl {#1}
+    \regex_extract_all:nxN {(\d{4})} {\g_ythesis_date_tl} \g_ythesis_year_seq
+    \tl_gset:Nn \g_ythesis_year_tl {\seq_item:Nn \g_ythesis_year_seq {1}}
 }
 
 % Draft option switch
@@ -44,6 +44,9 @@
 % Page numbering
 \tl_new:N	\g_page_numbering_tl
 
+% Font size (default should be 12pt)
+\str_new:N	\g_ythesis_fontsize_str
+\str_gset:Nn	\g_ythesis_fontsize_str {12pt}
 
 %% Option Parsing
 
@@ -52,12 +55,19 @@
 \PassOptionsToClass{draft}{\c__ythesis_parent_class_tl}
 }
 
+\DeclareOption{11pt}{
+	\str_gset:Nn	\g_ythesis_fontsize_str {11pt}
+}
+\DeclareOption{10pt}{
+	\str_gset:Nn	\g_ythesis_fontsize_str {10pt}
+}
+
 \DeclareOption*{ % Pass all remaining options to base class
 	\PassOptionsToClass{\CurrentOption}{\c__ythesis_parent_class_tl}
 }
 \ProcessOptions\relax
 
-\LoadClass[letterpaper]{\c__ythesis_parent_class_tl}
+\LoadClass[letterpaper, \g_ythesis_fontsize_str]{\c__ythesis_parent_class_tl}
 
 %% Margins
 \RequirePackage{geometry}
@@ -74,7 +84,7 @@
 		\par\vspace{1em}
 		\g_ythesis_author_tl
 		\par\vspace{1em}
-		\g_ythesis_datetl
+		\g_ythesis_date_tl
 		\par\vspace{1em}
 	\end{center}
 	\end{singlespace}
@@ -100,7 +110,7 @@
 				\par\vspace{1.5em}
 				Dissertation~Director:~\g_ythesis_advisor_tl
 				\par\vspace{1.5em}
-				\g_ythesis_datetl
+				\g_ythesis_date_tl
 			\end{center}
 		\end{singlespace}
 	\end{titlepage}
@@ -111,7 +121,7 @@
 		\begin{singlespace}
 			\begin{center}
 				% \g_ythesis__dateyear_tl \\
-				Copyright~\textcopyright{}~\g_ythesis_yeartl{}~by~\g_ythesis_author_tl\\
+				Copyright~\textcopyright{}~\g_ythesis_year_tl{}~by~\g_ythesis_author_tl\\
 				All~rights~reserved.
 			\end{center}
 		\end{singlespace}
