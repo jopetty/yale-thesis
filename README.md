@@ -7,10 +7,66 @@ This class was made to be:
 * A `LaTeX3` programming exercise. This class is programmed using `expl`.
 
 ## Usage
-Compile with `pdflatex`.
+### Version Control
+It is _highly_ recommended that you use a version control system, such as GitHub, while writing your thesis --- this lets you track and revert changes and means that you have a backup online. If you already use GitHub, fork this repository to your own account. If you don't want to use GitHub, clone this repository.
+
+### Directory Structure
+Once you have a copy of this respository, your directory should look something like this:
 ```
-$ pdflatex main.tex
+$ tree
+.
+├── LICENSE
+├── README.md
+├── content
+│   └── 0-abstract.tex
+├── example
+│   ├── content
+│   │   └── 0-abstract.tex
+│   ├── draft.pdf
+│   ├── draft.tex
+│   ├── main.pdf
+│   └── main.tex
+├── main.tex
+└── yale-thesis.cls
+
+4 directory, 10 files
 ```
+
+You can ignore the `example/` directory --- this just contains example documents to demonstrate what thesis and draft thesis look like. 
+
+The `content/` directory is where you will put all of your thesis chapters and the abstract, which is already included in the file `content/0-abstract.tex`. It's recommended to use a similar formatting scheme for the rest of your chapters: `content/#-name`, where `#` is the chapter number and `name`, the chapter name. This ensures that all the files will be presented in the order in which they appear in your document, making it much easier to find and edit specific chapters. Putting each chapter in its own file makes it easier to edit, revise, and revert changes you make as writing progresses.
+
+### Adding chapters
+To add chapters to your thesis, open `main.tex` and, below the line reading `%% Include your chapters here`, place the following line:
+```tex
+%% main.tex
+...
+
+%% Include your chapters here
+\include{content/#-name.tex}
+
+...
+```
+Do this for each chapter in your thesis.
+
+### External Resources
+If you have extra resources to include in your thesis --- images, code, figures, etc. --- you can optionally create a new directory named `resources/` and use it to store all the extra files so they don't clutter the main directory. Then, use the command
+```tex
+\input{resources/file.ext}
+```
+to place `file.ext` into your document.
+
+### Compilation
+`yale-thesis` has been tested with `pdflatex` and `xelatex`. `pdflatex` is likely the best TeX engine to use, unless you require unicode compatability, are writing multiple languages, or want to use custom fonts.
+
+While you are still editing your thesis, it may be helpful to mark the output document with the current draft that you are working on, so that you can quickly reference different printed or PDF versions of your thesis. To do so, pass the `draft` option to the `yale-thesis` class as shown below in `main.tex` (note that this is the default behavior):
+```tex
+%% main.tex
+\documentclass[draft]{yale-thesis}
+
+...
+```
+To remove the draft heading, remove the `draft` option from `main.tex`.
 
 ## Specifications
 A summary of the [Guide to Formatting the Doctoral Dissertation](http://gsas.yale.edu/sites/default/files/formatdissertation.pdf) by the Yale University GSAS.
